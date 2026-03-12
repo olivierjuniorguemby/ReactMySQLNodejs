@@ -12,6 +12,14 @@ function Home() {
     .catch(err => console.log(err));       
   }, [])
 
+  const handleDelete = (id) =>{
+    axios.delete("http://localhost:8081/delete/" + id)
+    .then(res => {
+        location.reload();
+    })
+    .catch(err => console.log(err))
+
+  }
   return (
     <div className="container-fluid mt-5 bg-primary">
       <h2>Student List</h2>
@@ -39,9 +47,9 @@ function Home() {
                     <td>{students.Name}</td>
                     <td>{students.Email}</td>
                     <td>
-                      <Link to='/read/${students.ID}' className="btn btn-info btn-sm">Read</Link>
-                      <button className="btn btn-primary btn-sm mx-2">Edit</button>
-                      <button className="btn btn-danger btn-sm">Delete</button>
+                      <Link to={`/read/${students.ID}`} className="btn btn-info btn-sm">Read</Link>
+                      <Link to={`/edit/${students.ID}`} className="btn btn-primary btn-sm mx-2">Edit</Link>
+                      <button onClick={()=> handleDelete(students.ID)} className="btn btn-danger btn-sm">Delete</button>
                     </td>
                   </tr>
                 )

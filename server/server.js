@@ -35,15 +35,35 @@ app.post('/student',(req, res) =>{
     })
 });
 
-app.get('/read/:id', (req, res)=>{
+app.get('/read/:id', (req, res) => {
+    const id = req.params.id;
     const sql = "SELECT * FROM students WHERE ID = ?";
+    
+    db.query(sql, [id], (err, result) => {
+        if(err) return res.json(err);
+        return res.json(result);
+    });
+});
+
+app.put('/update/:id', (req, res)=>{
+
+    const sql = "UPDATE students SET `Name`=?, `Email`=? WHERE ID=?";
+    const id = req.params.id;
+    db.query(sql, [req.body.name, req.body.email, id], (err, result)=>{
+        if(err) return res.json({Message:"Error inside server"});
+        return res.json(result);
+    })
+})
+
+app.delete('/delete/:id', (req, res)=>{
+    const sql = 'DELETE FROM students WHERE ID = ?';
     const id = req.params.id;
 
     db.query(sql, [id], (err, result)=>{
-        if(err) return res.json({Message: "Error inside server"});
-        return res.json(result);
+        if(err) return res.json({Message:"Error inside server"});
+        return res.json(result); 
     })
-});
+})
 
 app.listen(8081, ()=>{
     console.log("Listening");
